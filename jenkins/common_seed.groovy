@@ -1,4 +1,4 @@
-def baseUrl = "https://github.com//"
+def baseUrl = "git@github.com:Prudvitej123/jenkins_shared_lib.git"
 def repoName = "$jobname"
 def gitRepoUrl = baseUrl + repoName + ".git"
 def jobName = "$reponame"
