@@ -1,10 +1,8 @@
 def baseUrl = "https://github.com/Prudvitej123/"
-def repoName = "jenkins_shared_lib"
+def repoName = "$reponame"
 def gitRepoUrl = baseUrl + repoName + ".git"
 
-def jobName = "generated-pipeline-job"
-def branchName = "*/main"
-def jenkinsfilePath = "Jenkinsfile"
+def jobName = "$reponame"
 
 pipelineJob(jobName) {
 
