@@ -1,26 +1,52 @@
-def baseUrl = "https://github.com/Prudvitej123/"
-def repoName = reponame
-def gitRepoUrl = baseUrl + repoName + ".git"
+import groovy.json.JsonSlurper
 
-def jobName = reponame
-def branchSpec = "*/main,*/master"   // 🔥 FIXED
-def jenkinsfilePath = "Jenkinsfile"
+def jsonFile = new File("${WORKSPACE}/jenkins/input_jobs.json")
+def config = new JsonSlurper().parse(jsonFile)
 
-pipelineJob(jobName) {
+def baseUrl = config.baseUrl
 
-    definition {
-        cpsScm {
-            scm {
-                git {
-                    remote {
-                        url(gitRepoUrl)
-                        credentials('github_credentials')
+config.repositories.each { repo ->
+
+    def repoName        = repo.name
+    def branchName      = repo.branch
+    def jenkinsfilePath = repo.scriptPath  
+
+    def gitRepoUrl = "${baseUrl}${repoName}.git"
+    def jobName    = repoName
+
+    pipelineJob(jobName) {
+
+        properties {
+            pipelineTriggers {
+                triggers {
+                    pollSCM {
+                        scmpoll_spec('*/1 * * * *')
+                        ignorePostCommitHooks(true)
                     }
-                    branches(branchSpec)
                 }
             }
-            scriptPath(jenkinsfilePath)
+        }
+
+        logRotator {
+            numToKeep(5)
+        }
+
+        definition {
+            cpsScm {
+                scm {
+                    git {
+                        remote {
+                            url(gitRepoUrl)
+                            credentials('github_credentials')
+                        }
+                        branches(branchName)
+                        extensions {
+                            cleanBeforeCheckout()
+                        }
+                    }
+                }
+                scriptPath(jenkinsfilePath)   // ✅ now works
+            }
         }
     }
 }
-
