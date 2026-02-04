@@ -1,41 +1,43 @@
-def baseUrl = "https://github.com/Prudvitej123/jenkins_shared_lib"
-def repoName = "$jobname"
+def baseUrl = "https://github.com/Prudvitej123/"
+def repoName = "jenkins_shared_lib"
 def gitRepoUrl = baseUrl + repoName + ".git"
-def jobName = "$reponame"
 
-    pipelineJob(jobName) {
+def jobName = "generated-pipeline-job"
+def branchName = "*/main"
+def jenkinsfilePath = "Jenkinsfile"
 
-        properties {
-            pipelineTriggers {
-                triggers {
-                    pollSCM {
-                        scmpoll_spec('*/1 * * * *')
-                        ignorePostCommitHooks(true)
-                    }
+pipelineJob(jobName) {
+
+    properties {
+        pipelineTriggers {
+            triggers {
+                pollSCM {
+                    scmpoll_spec('*/1 * * * *')
+                    ignorePostCommitHooks(true)
                 }
             }
         }
+    }
 
-        logRotator {
-            numToKeep(5)
-        }
+    logRotator {
+        numToKeep(5)
+    }
 
-        definition {
-            cpsScm {
-                scm {
-                    git {
-                        remote {
-                            url(gitRepoUrl)
-                            credentials('github_credentials')
-                        }
-                        branches(branchName)
-                        extensions {
-                            cleanBeforeCheckout()
-                        }
+    definition {
+        cpsScm {
+            scm {
+                git {
+                    remote {
+                        url(gitRepoUrl)
+                        credentials('github_credentials')
+                    }
+                    branches(branchName)
+                    extensions {
+                        cleanBeforeCheckout()
                     }
                 }
-                scriptPath(jenkinsfilePath)   // ✅ now works
             }
+            scriptPath(jenkinsfilePath)
         }
     }
 }
