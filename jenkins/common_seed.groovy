@@ -3,7 +3,7 @@ def repoName = reponame
 def gitRepoUrl = baseUrl + repoName + ".git"
 
 def jobName = reponame
-def branchName = "*/main"
+def branchSpec = branch ?: "*/main,*/master"
 def jenkinsfilePath = "Jenkinsfile"
 
 pipelineJob(jobName) {
