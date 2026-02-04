@@ -1,11 +1,17 @@
+/***********************
+ * GLOBAL VARIABLES
+ ***********************/
 def baseUrl = "https://github.com/Prudvitej123/"
-def repoName = reponame
+def repoName = reponame                      // Jenkins parameter
 def gitRepoUrl = baseUrl + repoName + ".git"
 
 def jobName = reponame
 def branchSpec = branch ?: "*/main,*/master"
 def jenkinsfilePath = "Jenkinsfile"
 
+/***********************
+ * PIPELINE JOB
+ ***********************/
 pipelineJob(jobName) {
 
     properties {
@@ -31,7 +37,7 @@ pipelineJob(jobName) {
                         url(gitRepoUrl)
                         credentials('github_credentials')
                     }
-                    branches(branchName)
+                    branches(branchSpec)   // ✅ FIXED HERE
                     extensions {
                         cleanBeforeCheckout()
                     }
