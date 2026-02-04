@@ -1,18 +1,23 @@
 import groovy.json.JsonSlurper
 
-def jsonFile = new File("${WORKSPACE}/jenkins/input_jobs.json")
-def config = new JsonSlurper().parse(jsonFile)
+// ✅ Correct way to read JSON in Job DSL
+def jsonText = readFileFromWorkspace('jenkins/input_jobs.json')
+def config   = new JsonSlurper().parseText(jsonText)
 
+// base GitHub URL (already contains username)
 def baseUrl = config.baseUrl
 
 config.repositories.each { repo ->
 
     def repoName        = repo.name
     def branchName      = repo.branch
-    def jenkinsfilePath = repo.scriptPath  
+    def jenkinsfilePath = repo.scriptPath
 
+    // ✅ Correct repo URL
     def gitRepoUrl = "${baseUrl}${repoName}.git"
-    def jobName    = repoName
+
+    // ✅ Safe Jenkins job name
+    def jobName = repoName.replace('/', '-')
 
     pipelineJob(jobName) {
 
@@ -20,7 +25,7 @@ config.repositories.each { repo ->
             pipelineTriggers {
                 triggers {
                     pollSCM {
-                        scmpoll_spec('*/1 * * * *')
+                        scmpoll_spec('H/5 * * * *')
                         ignorePostCommitHooks(true)
                     }
                 }
@@ -37,7 +42,7 @@ config.repositories.each { repo ->
                     git {
                         remote {
                             url(gitRepoUrl)
-                            credentials('github_credentials')
+                            credentials('github_credentials') // 🔑 FIX
                         }
                         branches(branchName)
                         extensions {
@@ -45,7 +50,8 @@ config.repositories.each { repo ->
                         }
                     }
                 }
-                scriptPath(jenkinsfilePath)   // ✅ now works
+                scriptPath(jenkinsfilePath)
+                lightweight(true)
             }
         }
     }
