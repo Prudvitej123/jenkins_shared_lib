@@ -8,13 +8,13 @@ pipeline {
         VERSION = "${BUILD_NUMBER}"
         PROJECT = "${projectName}"
         IMAGE = "$PROJECT:$VERSION"
-        ECRURL = 'https://713363449239.dkr.ecr.ap-south-1.amazonaws.com/${projectName}'
+        ECRURL = 'https://363898086629.dkr.ecr.ap-south-1.amazonaws.com/${projectName}'
         ECRCRED = 'ecr:ap-south-1:aws_credentials'
     }
     stages {
 		stage('GetSCM'){
          steps {
-            git credentialsId: 'github_credentials', url: 'https://github.com/jmstechops2/spring3-mvc-maven-xml-hello-world.git'
+            git credentialsId: 'github_credentials', url: 'https://github.com/Prudvitej123/spring3-mvc-maven-xml-hello-world.git'
 		 }
          }
 
