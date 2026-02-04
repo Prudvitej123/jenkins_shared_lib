@@ -1,13 +1,13 @@
 {
-  "baseUrl": "https://github.com/jmstechops2/",
+  "baseUrl": "https://github.com/Prudvitej123/",
   "repositories": [
     {
-      "name": "test-1-madhu",
+      "name": "test-1-prudvi",
       "branch": "master",
       "scriptPath": "MyJenkinsfile"
     },
     {
-      "name": "test-2-madhu",
+      "name": "test-2-prudvi",
       "branch": "main",
       "scriptPath": "Jenkinsfile"
     },
