@@ -1,18 +1,7 @@
-import groovy.json.JsonSlurper
-
-def jsonFile = new File("${WORKSPACE}/jenkins/input_jobs.json")
-def config = new JsonSlurper().parse(jsonFile)
-
-def baseUrl = config.baseUrl
-
-config.repositories.each { repo ->
-
-    def repoName        = repo.name
-    def branchName      = repo.branch
-    def jenkinsfilePath = repo.scriptPath  
-
-    def gitRepoUrl = "${baseUrl}${repoName}.git"
-    def jobName    = repoName
+def baseUrl = "https://github.com//"
+def repoName = "$jobname"
+def gitRepoUrl = baseUrl + repoName + ".git"
+def jobName = "$reponame"
 
     pipelineJob(jobName) {
 
